@@ -1,0 +1,4 @@
+#Fri Feb 22 17:41:13 ECT 2019
+base.0=/Users/santiagot/Projects/Gospace/FlutterTest/zoom_drag_basic_example/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
