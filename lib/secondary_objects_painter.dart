@@ -1,43 +1,65 @@
 import 'package:flutter/material.dart';
+import 'globals.dart' as globals;
 
-class SecundaryPainter extends CustomPainter {
-  const SecundaryPainter({
-    this.zoom,
-    this.offset,
-  });
-
-  final double zoom;
-  final Offset offset;
-
-
-  @override
-  void paint(Canvas canvas, Size size) {
-
-    final Offset center = size.center(Offset.zero) * zoom + offset;
-
-    /*print(center);
-    print(center.dx);
-    print(center.dy);*/
-
-    final Paint paint = Paint();
-    final Path path = Path();
-
-    var points = [Offset(center.dx-50*zoom, center.dy-50*zoom),
-    Offset(center.dx+50*zoom, center.dy-50*zoom),
-    Offset(center.dx+50*zoom, center.dy+50*zoom),
-    Offset(center.dx-50*zoom, center.dy+50*zoom),
-    Offset(center.dx-50*zoom, center.dy-50*zoom)];
-    path.addPolygon(points, true);
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 5.0;
-    paint.strokeJoin = StrokeJoin.round;
-    paint.color = Colors.deepOrangeAccent;
-    canvas.drawPath(path, paint);
+class SecondaryObjects extends StatefulWidget {
+  double _zoom;
+  Offset _position;
+  SecondaryObjects(double zoom, Offset position) {
+    this._zoom = zoom;
+    this._position = position;
   }
 
   @override
-  bool shouldRepaint(SecundaryPainter oldPainter) {
-    return oldPainter.zoom != zoom
-        || oldPainter.offset != offset;
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return SecondaryObjectsState();
+  }
+}
+
+class SecondaryObjectsState extends State<SecondaryObjects> {
+  Offset _offset_position;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _offset_position = Offset(globals.center.dx + widget._position.dx, globals.center.dy + widget._position.dy);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Positioned(
+          left: (_offset_position.dx *widget._zoom) + globals.center.dx,
+          top: (_offset_position.dy *widget._zoom) + globals.center.dy,
+          child: GestureDetector(
+              onTap: (){
+                print('Tab');
+                //tab = true;
+              },
+              onPanUpdate: (details) {
+                setState(() {
+                  print('Pan');
+                  print(details.delta.dx);
+                  print(details.delta.dy);
+                  print(globals.center);
+                  //print(tab);
+                  //if(tab){
+                  _offset_position = Offset(_offset_position.dx + details.delta.dx , _offset_position.dy + details.delta.dy);
+                  //}
+                });
+              },
+              child: Container(
+                width: 100 * widget._zoom,
+                height: 20 * widget._zoom,
+                color: Colors.blue,
+              )
+          ),
+        ),
+      ],
+    );
   }
 }

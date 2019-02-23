@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main_object_painter.dart';
 import 'globals.dart' as globals;
+import 'secondary_objects_painter.dart';
 
 
 void main() => runApp(MyApp());
@@ -25,18 +26,13 @@ class MyAppState extends State<MyApp> {
   Offset _offset_position2 = Offset(150.0, 300.0);
   bool tab = false;
 
-  @override
-  void initState() {
-    // TODO: implement initState
- 
-    _offset_position = Offset(globals.center.dx + 100.0, globals.center.dy + 250.0);
-    super.initState();
-  }
   void _handleScaleStart(ScaleStartDetails details) {
     setState(() {
       _startingFocalPoint = details.focalPoint;
       _previousOffset = _offset;
       _previousZoom = _zoom;
+      _offset_position = Offset(globals.center.dx + 100.0, globals.center.dy + 250.0);
+
     });
   }
 
@@ -51,6 +47,19 @@ class MyAppState extends State<MyApp> {
         //_offset_position = Offset(globals.center.dx + _offset_position.dx, globals.center.dy + _offset_position.dy);
 
     });
+  }
+
+  List<Widget> createTables() {
+    List<Offset> tablesPositions = [Offset(globals.center.dx + 100.0, globals.center.dy + 250.0),
+    Offset(globals.center.dx + 200.0, globals.center.dy + 250.0)];
+    List<SecondaryObjects> listTables = new List();
+    print(tablesPositions);
+
+    for(int i=0; i <tablesPositions.length; i++){
+      listTables.add(SecondaryObjects(_zoom, tablesPositions[i]));
+    }
+
+    return listTables;
   }
 
   @override
@@ -77,56 +86,9 @@ class MyAppState extends State<MyApp> {
                 ),
                 child: Stack(
                   fit: StackFit.expand,
-                  children: <Widget>[
-                    Positioned(
-                      left: (_offset_position.dx *_zoom) + globals.center.dx,
-                      top: (_offset_position.dy *_zoom) + globals.center.dy,
-                      child: GestureDetector(
-                        onTap: (){
-                          print('Tab');
-                          tab = true;
-                        },
-                        onPanUpdate: (details) {
-                        setState(() {
-                            print('Pan');
-                            print(details.delta.dx);
-                            print(details.delta.dy);
-                            print(globals.center);
-                            //print(tab);
-                            //if(tab){
-                              _offset_position = Offset(_offset_position.dx + details.delta.dx , _offset_position.dy + details.delta.dy);
-                            //}
-
-                        });
-                        },
-                      child: Container(
-                          width: 100 * _zoom,
-                          height: 100 * _zoom,
-                          color: Colors.blue,
-                      )
-                      ),
-                    ),
-                    Positioned(
-                      left: _offset_position2.dx,
-                      top: _offset_position2.dy,
-                      child: GestureDetector(
-                          onPanUpdate: (details) {
-
-                            setState(() {
-                              print('Pan2');
-                              print(globals.center);
-                              _offset_position2 = Offset(_offset_position2.dx + details.delta.dx, _offset_position2.dy + details.delta.dy);
-                            });
-                          },
-                          child: Container(
-                            width: 100*_zoom,
-                            height: 100*_zoom,
-                            color: Colors.deepOrange,
-                          )
-                      ),
-                    ),
-                  ],
-                ),
+                  children:
+                    createTables()
+                )
               ),
             )
           ],
