@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'globals.dart' as globals;
+import 'table_painter.dart';
 
 class SecondaryObjects extends StatefulWidget {
   double _zoom;
-  Offset _position;
+  Offset _table_position;
+
   SecondaryObjects(double zoom, Offset position) {
     this._zoom = zoom;
-    this._position = position;
+    this._table_position = position;
+
   }
 
   @override
@@ -17,45 +20,60 @@ class SecondaryObjects extends StatefulWidget {
 }
 
 class SecondaryObjectsState extends State<SecondaryObjects> {
-  Offset _offset_position;
+  Offset _offset_position; //Offset(globals.center.dx + widget._table_position.dx, globals.center.dy + widget._table_position.dy);
 
   @override
   void initState() {
     // TODO: implement initState
-    _offset_position = Offset(globals.center.dx + widget._position.dx, globals.center.dy + widget._position.dy);
+    print("Global center");
+    print(globals.center);
+    print(widget._table_position);
+    _offset_position = Offset(widget._table_position.dx, widget._table_position.dy);
+    print(_offset_position);
+
     super.initState();
   }
 
+  /*@override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    _offset_position = Offset(globals.center.dx + widget._table_position.dx, globals.center.dy + widget._table_position.dy);
+    super.didChangeDependencies();
+  }*/
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
         Positioned(
-          left: (_offset_position.dx *widget._zoom) + globals.center.dx,
-          top: (_offset_position.dy *widget._zoom) + globals.center.dy,
+          left: (_offset_position.dx * widget._zoom) + globals.center.dx,
+          top: (_offset_position.dy * widget._zoom) + globals.center.dy,
           child: GestureDetector(
               onTap: (){
-                print('Tab');
                 //tab = true;
               },
               onPanUpdate: (details) {
                 setState(() {
-                  print('Pan');
-                  print(details.delta.dx);
-                  print(details.delta.dy);
-                  print(globals.center);
-                  //print(tab);
+                  print("Update");
                   //if(tab){
-                  _offset_position = Offset(_offset_position.dx + details.delta.dx , _offset_position.dy + details.delta.dy);
+                  _offset_position = Offset(_offset_position.dx + details.delta.dx/widget._zoom , _offset_position.dy + details.delta.dy/widget._zoom);
+                  print(_offset_position);
                   //}
                 });
               },
               child: Container(
-                width: 100 * widget._zoom,
+                width: 20 * widget._zoom,
                 height: 20 * widget._zoom,
                 color: Colors.blue,
+                child: CustomPaint(
+                  painter: TablePainter(
+                      zoom: widget._zoom,
+                      //offset: widget._position
+                  points: widget._table_position * widget._zoom
+                  )
+                )
               )
           ),
         ),

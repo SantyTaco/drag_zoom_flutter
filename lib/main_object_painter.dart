@@ -5,37 +5,46 @@ class IndoorMapPinter extends CustomPainter {
   const IndoorMapPinter({
     this.zoom,
     this.offset,
+    this.points
   });
 
   final double zoom;
   final Offset offset;
+  final List<List<List<String>>> points;
 
 
   @override
   void paint(Canvas canvas, Size size) {
 
     final Offset center = size.center(Offset.zero) * zoom + offset;
-    globals.center = center;
 
-    print('Offset center');
-    print(center);
-    //print(center.dx);
-    //print(center.dy);
+    globals.center = center;
+    print("Center");
+    print(globals.center);
+
 
     final Paint paint = Paint();
     final Path path = Path();
 
-    var points = [Offset(center.dx-200*zoom, center.dy-200*zoom),
-    Offset(center.dx+200*zoom, center.dy-200*zoom),
-    Offset(center.dx+200*zoom, center.dy+200*zoom),
-    Offset(center.dx-200*zoom, center.dy+200*zoom),
-    Offset(center.dx-200*zoom, center.dy-200*zoom)];
-    path.addPolygon(points, true);
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 5.0;
-    paint.strokeJoin = StrokeJoin.round;
-    paint.color = Color.fromRGBO(150, 150, 150, 1.0);
-    canvas.drawPath(path, paint);
+
+    for(int i = 0; i < points.length; i++) {
+      List<Offset> listOffsetPoints = new List();
+      path.reset();
+
+      for (int j = 0; j < points[i].length; j++) {
+        listOffsetPoints.add(Offset(
+            center.dx + double.parse(points[i][j][0]) * zoom,
+            center.dy - double.parse(points[i][j][1]) * zoom));
+      }
+      path.addPolygon(listOffsetPoints, true);
+
+      print(path);
+      paint.style = PaintingStyle.stroke;
+      paint.strokeWidth = 5.0;
+      paint.strokeJoin = StrokeJoin.round;
+      paint.color = Color.fromRGBO(150, 150, 150, 1.0);
+      canvas.drawPath(path, paint);
+    }
   }
 
   @override
