@@ -5,10 +5,12 @@ import 'table_painter.dart';
 class SecondaryObjects extends StatefulWidget {
   double _zoom;
   Offset _table_position;
+  List<Offset> _listOffsetTablePoints;
 
-  SecondaryObjects(double zoom, Offset position) {
+  SecondaryObjects(double zoom, Offset position, List<Offset> listOffsetTablePoints) {
     this._zoom = zoom;
     this._table_position = position;
+    this._listOffsetTablePoints = listOffsetTablePoints;
 
   }
 
@@ -47,10 +49,17 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        Positioned(
+          Positioned(
           left: (_offset_position.dx * widget._zoom) + globals.center.dx,
           top: (_offset_position.dy * widget._zoom) + globals.center.dy,
-          child: GestureDetector(
+          child: CustomPaint(
+              painter: TablePainter(
+                  zoom: widget._zoom,
+                  //offset: widget._position
+                  points: widget._table_position, //* widget._zoom,
+                offsetTablePoints: widget._listOffsetTablePoints//_offset_position * widget._zoom
+              )
+          )/*GestureDetector(
               onTap: (){
                 //tab = true;
               },
@@ -58,7 +67,7 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
                 setState(() {
                   print("Update");
                   //if(tab){
-                  _offset_position = Offset(_offset_position.dx + details.delta.dx/widget._zoom , _offset_position.dy + details.delta.dy/widget._zoom);
+                  _offset_position = Offset(_offset_position.dx + details.delta.dx/widget._zoom, _offset_position.dy + details.delta.dy/widget._zoom);
                   print(_offset_position);
                   //}
                 });
@@ -68,14 +77,14 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
                 height: 20 * widget._zoom,
                 color: Colors.blue,
                 child: CustomPaint(
-                  painter: TablePainter(
-                      zoom: widget._zoom,
-                      //offset: widget._position
-                  points: widget._table_position * widget._zoom
-                  )
+                    painter: TablePainter(
+                        zoom: widget._zoom,
+                        //offset: widget._position
+                        points: widget._table_position * widget._zoom //_offset_position * widget._zoom
+                    )
                 )
               )
-          ),
+          ),*/
         ),
       ],
     );

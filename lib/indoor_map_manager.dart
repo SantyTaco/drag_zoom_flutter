@@ -15,7 +15,7 @@ class IndoorMapManager extends StatefulWidget {
 
 
 class IndoorMappManagerState extends State<IndoorMapManager> {
-  double _zoom = 1.0;
+  double _zoom = 1;
   Offset _offset = Offset.zero;
 
   Offset _startingFocalPoint;
@@ -59,24 +59,23 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
 
   List<Widget> createTables() {
 
-    List<Offset> tablesPositions = [Offset(0.0, 0.0),
-    Offset(0.0, 5.0)];
+    /*List<Offset> tablesPositions = [Offset(187.8, 269.09)];
     //getTablePosition();
     List<SecondaryObjects> listTables = new List();
     print("List possitions");
     print(tablesPositions);
     for(int i=0; i <tablesPositions.length; i++){
-      listTables.add(SecondaryObjects(_zoom, tablesPositions[i]));
+      listTables.add(SecondaryObjects(_zoom,tablesPositions[i]));
     }
 
-    return listTables;
-    /*List<String> tablePoints = new List();
+    return listTables;*/
+    List<String> tablePoints = new List();
     List<List<List<String>>> xyzPointsFinal = new List();
     List<List<Offset>> offsetTablesFinal = new List();
 
     tablePoints.add("-27635.4415632293 -71140.53080777019, -27635.4415632293 -71826.24509348448, -27635.4415632293 -71826.24509348448, -26949.72727751501 -71826.24509348448, -26949.72727751501 -71826.24509348448, -26949.72727751501 -71140.53080777019, -26949.72727751501 -71140.53080777019, -27635.4415632293 -71140.53080777019");
-    tablePoints.add("-27635.4415632293 -70409.02571979591, -27635.4415632293 -71094.7400055102, -27635.4415632293 -71094.7400055102, -26949.72727751501 -71094.7400055102, -26949.72727751501 -71094.7400055102, -26949.72727751501 -70409.02571979591, -26949.72727751501 -70409.02571979591, -27635.4415632293 -70409.02571979591");
-    tablePoints.add("-27681.23236548928 -71094.7400055102, -27681.23236548928 -70409.02571979591, -27681.23236548928 -70409.02571979591, -28366.94665120357 -70409.02571979591, -28366.94665120357 -70409.02571979591, -28366.94665120357 -71094.7400055102, -28366.94665120357 -71094.7400055102, -27681.23236548928 -71094.7400055102");
+    //tablePoints.add("-27635.4415632293 -70409.02571979591, -27635.4415632293 -71094.7400055102, -27635.4415632293 -71094.7400055102, -26949.72727751501 -71094.7400055102, -26949.72727751501 -71094.7400055102, -26949.72727751501 -70409.02571979591, -26949.72727751501 -70409.02571979591, -27635.4415632293 -70409.02571979591");
+    //tablePoints.add("-27681.23236548928 -71094.7400055102, -27681.23236548928 -70409.02571979591, -27681.23236548928 -70409.02571979591, -28366.94665120357 -70409.02571979591, -28366.94665120357 -70409.02571979591, -28366.94665120357 -71094.7400055102, -28366.94665120357 -71094.7400055102, -27681.23236548928 -71094.7400055102");
 
     xyzPointsFinal = getPoints(tablePoints);
 
@@ -96,17 +95,18 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
 
 
     List<Offset> tablesPositions = getTablePosition(xyzPointsFinal);
-    //List<Offset> tablesPositions = [Offset(100.0, 250.0), Offset(100.0, 300.0)];
+    //List<Offset> tablesPositions = [Offset(187.8, 269.09), Offset(187.8, 280.0)];
 
     List<SecondaryObjects> listTables = new List();
     print(tablesPositions);
 
     for(int i=0; i <tablesPositions.length; i++){
-      listTables.add(SecondaryObjects(_zoom, tablesPositions[i], offsetTablesFinal[i]));
+      listTables.add(SecondaryObjects(_zoom, _offset, offsetTablesFinal[i]));
     }
 
-    return listTables;*/
+    return listTables;
   }
+
 
   List<Offset> getTablePosition(List<List<List<String>>> xyzPointsFinal) {
     List<Offset> tablesPositions = new List();
@@ -125,10 +125,10 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
   IndoorMapPinter createFloorPerimeter(double zoom, Offset offset) {
     List<String> floorPonits = new List();
     List<List<List<String>>> xyzPointsFinal = new List();
-    floorPonits.add("0 0, -700 -300, 700 -300, 700 800,0 800, 0 1200,-700 1200,-700 -300");
+    //floorPonits.add("0 0, -700 -300, 700 -300, 700 800,0 800, 0 1200,-700 1200,-700 -300");
     //floorPonits.add("-500 -100, 500 -100, 500 300,-500 300,-500 -100");
 
-    /*floorPonits.add("-52024.38282852434 -74872.34950061364 20000, -52024.38282852434 -64058.48476748931 20000, -21333.00951075092 -63558.42165844208 20000, -21333.00951075092 -74872.34950061364 20000, -52024.38282852434 -74872.34950061364 20000");
+    floorPonits.add("-52024.38282852434 -74872.34950061364 20000, -52024.38282852434 -64058.48476748931 20000, -21333.00951075092 -63558.42165844208 20000, -21333.00951075092 -74872.34950061364 20000, -52024.38282852434 -74872.34950061364 20000");
     floorPonits.add("-25071.38906930248 -68832.66600068433 20000, -25071.38906930248 -68873.8777227183 20000");
     floorPonits.add("-43532.73869406105 -67992.14412169225 20000, -43532.73869406105 -68033.35584372625 20000");
     floorPonits.add("-47540.88198909858 -66558.68098154891 20000, -47540.88198909858 -66599.8927035829 20000");
@@ -157,7 +157,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     floorPonits.add("-39928.85074340684 -70435.43500519474 20000, -39928.85074340684 -70476.64672722874 20000");
     floorPonits.add("-39942.9732673682 -67915.61176055644 20000, -39942.9732673682 -67956.82348259044 20000");
     floorPonits.add("-36966.15623481759 -65338.31216196156 20000, -36966.15623481759 -65379.52388399554 20000");
-    floorPonits.add("-42162.69255263312 -65386.98945739889 20000, -42162.69255263312 -65428.20117943287 20000");*/
+    floorPonits.add("-42162.69255263312 -65386.98945739889 20000, -42162.69255263312 -65428.20117943287 20000");
 
     xyzPointsFinal = getPoints(floorPonits);
     print(xyzPointsFinal);
