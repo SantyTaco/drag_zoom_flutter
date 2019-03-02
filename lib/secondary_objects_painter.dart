@@ -52,14 +52,7 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
           Positioned(
           left: (_offset_position.dx * widget._zoom) + globals.center.dx,
           top: (_offset_position.dy * widget._zoom) + globals.center.dy,
-          child: CustomPaint(
-              painter: TablePainter(
-                  zoom: widget._zoom,
-                  //offset: widget._position
-                  points: widget._table_position, //* widget._zoom,
-                offsetTablePoints: widget._listOffsetTablePoints//_offset_position * widget._zoom
-              )
-          )/*GestureDetector(
+          child: GestureDetector(
               onTap: (){
                 //tab = true;
               },
@@ -73,18 +66,20 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
                 });
               },
               child: Container(
-                width: 20 * widget._zoom,
-                height: 20 * widget._zoom,
+                width: 100 * widget._zoom,
+                height: 100 * widget._zoom,
                 color: Colors.blue,
                 child: CustomPaint(
                     painter: TablePainter(
                         zoom: widget._zoom,
                         //offset: widget._position
-                        points: widget._table_position * widget._zoom //_offset_position * widget._zoom
+                        points: widget._table_position * widget._zoom, //_offset_position * widget._zoom
+                        offsetTablePoints: widget._listOffsetTablePoints
+
                     )
                 )
               )
-          ),*/
+          ),
         ),
       ],
     );
