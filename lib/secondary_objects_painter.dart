@@ -70,18 +70,20 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
                 height: 300 * widget._zoom,
 
                 decoration:BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.lightGreen,
                   shape: BoxShape.circle
                 ),
-                child: CustomPaint(
-                    painter: TablePainter(
-                        zoom: widget._zoom,
-                        //offset: widget._position
-                        points: widget._table_position * widget._zoom, //_offset_position * widget._zoom
-                        offsetTablePoints: widget._listOffsetTablePoints
+                child: Center(
+                        child: CustomPaint(
+                            painter: TablePainter(
+                                zoom: widget._zoom,
+                                //offset: widget._position
+                                points: widget._table_position * widget._zoom, //_offset_position * widget._zoom
+                                offsetTablePoints: widget._listOffsetTablePoints
 
-                    )
-                )
+                            )
+                        )
+                      )
               )
           ),
         ),

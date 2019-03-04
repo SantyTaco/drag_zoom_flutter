@@ -28,7 +28,7 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        brightness: Brightness.light
+        brightness: Brightness.dark
       ),
       home: Scaffold(
         appBar: AppBar(
