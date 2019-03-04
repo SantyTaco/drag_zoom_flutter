@@ -66,9 +66,13 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
                 });
               },
               child: Container(
-                width: 100 * widget._zoom,
-                height: 100 * widget._zoom,
-                color: Colors.blue,
+                width: 300 * widget._zoom,
+                height: 300 * widget._zoom,
+
+                decoration:BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle
+                ),
                 child: CustomPaint(
                     painter: TablePainter(
                         zoom: widget._zoom,

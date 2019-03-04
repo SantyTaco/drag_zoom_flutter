@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'secondary_objects_painter.dart';
 import 'main_object_painter.dart';
 import 'globals.dart' as globals;
+import 'package:drag_zoom_flutter/service/floor_service.dart';
+import 'package:drag_zoom_flutter/model/floor_model.dart';
+import 'package:drag_zoom_flutter/model/wall_model.dart';
+import 'package:drag_zoom_flutter/model/stairs_model.dart';
 
 
 
@@ -15,8 +19,8 @@ class IndoorMapManager extends StatefulWidget {
 
 
 class IndoorMappManagerState extends State<IndoorMapManager> {
-  double _zoom = 1;
-  Offset _offset = Offset.zero;
+  double _zoom = 0.02545424195914335;
+  Offset _offset = Offset(906.7, -1604.5);//Offset.zero;
 
   Offset _startingFocalPoint;
   Offset _previousOffset;
@@ -46,6 +50,9 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
       // Ensure that item under the focal point stays in the same place despite zooming
       final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) / _previousZoom;
       _offset = details.focalPoint - normalizedOffset * _zoom;
+      print("Update");
+      print(_zoom);
+      print(_offset);
     });
   }
 
@@ -53,6 +60,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     List<String> tablePoints = new List();
     List<List<List<String>>> xyzPointsFinal = new List();
     List<List<Offset>> offsetTablesFinal = new List();
+
 
     tablePoints.add("-27635.4415632293 -71140.53080777019, -27635.4415632293 -71826.24509348448, -27635.4415632293 -71826.24509348448, -26949.72727751501 -71826.24509348448, -26949.72727751501 -71826.24509348448, -26949.72727751501 -71140.53080777019, -26949.72727751501 -71140.53080777019, -27635.4415632293 -71140.53080777019");
     tablePoints.add("-27635.4415632293 -70409.02571979591, -27635.4415632293 -71094.7400055102, -27635.4415632293 -71094.7400055102, -26949.72727751501 -71094.7400055102, -26949.72727751501 -71094.7400055102, -26949.72727751501 -70409.02571979591, -26949.72727751501 -70409.02571979591, -27635.4415632293 -70409.02571979591");
@@ -81,15 +89,12 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     xyzPointsFinal = getPoints(tablePoints);
 
     print("Tables points for CreateTables");
-    print(xyzPointsFinal);
 
     for(int i = 0; i < xyzPointsFinal.length; i++) {
       List<Offset> offsetTables = new List();
       for(int j = 0; j < xyzPointsFinal[i].length; j++) {
         offsetTables.add(Offset(double.parse(xyzPointsFinal[i][j][0]) * _zoom, -double.parse(xyzPointsFinal[i][j][1])*_zoom));
       }
-      print("XYZFinal");
-      print(xyzPointsFinal[i]);
       offsetTablesFinal.add(offsetTables);
     }
 
@@ -156,14 +161,48 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     return setDxPointsList;
   }
 
+  String removeExtraPolygonCharacters(String polygon) {
+    String removeFirstCharacters = polygon.replaceAll("POLYGON Z ((", "");
+    String removeLastCharacters = removeFirstCharacters.replaceAll("))", "");
+    return removeLastCharacters;
+  }
+
+  String removeExtraLinestringCharacters(String polygon) {
+    String removeFirstCharacters = polygon.replaceAll("LINESTRING Z (", "");
+    String removeLastCharacters = removeFirstCharacters.replaceAll(")", "");
+    return removeLastCharacters;
+  }
+
+  String removeExtraPointCharacters(String polygon) {
+    String removeFirstCharacters = polygon.replaceAll("POINT Z (", "");
+    String removeLastCharacters = removeFirstCharacters.replaceAll(")", "");
+    return removeLastCharacters;
+  }
 
   IndoorMapPinter createFloorPerimeter(double zoom, Offset offset) {
     List<String> floorPonits = new List();
     List<List<List<String>>> xyzPointsFinal = new List();
     //floorPonits.add("0 0, -700 -300, 700 -300, 700 800,0 800, 0 1200,-700 1200,-700 -300");
     //floorPonits.add("-500 -100, 500 -100, 500 300,-500 300,-500 -100");
+    print("Perimeter");
+    String polygonString = globals.floor_data.perimeter.polygon;
+    String polygonStringFormat = removeExtraPolygonCharacters(polygonString);
+    floorPonits.add(polygonStringFormat);
 
-    floorPonits.add("-52024.38282852434 -74872.34950061364 20000, -52024.38282852434 -64058.48476748931 20000, -21333.00951075092 -63558.42165844208 20000, -21333.00951075092 -74872.34950061364 20000, -52024.38282852434 -74872.34950061364 20000");
+    List<Wall> polygonListWall = globals.floor_data.walls;
+    for(int i = 0; i < polygonListWall.length; i++) {
+      String linestringWallFormat = removeExtraLinestringCharacters(polygonListWall[i].polygon);
+      floorPonits.add(linestringWallFormat);
+    }
+
+    List<Stairs> polygonListStair = globals.floor_data.stairs;
+    for(int i = 0; i < polygonListStair.length; i++) {
+      String linestringWallFormat = removeExtraPointCharacters(polygonListStair[i].polygon);
+      floorPonits.add(linestringWallFormat);
+    }
+
+
+    /*floorPonits.add("-52024.38282852434 -74872.34950061364 20000, -52024.38282852434 -64058.48476748931 20000, -21333.00951075092 -63558.42165844208 20000, -21333.00951075092 -74872.34950061364 20000, -52024.38282852434 -74872.34950061364 20000");
     floorPonits.add("-25071.38906930248 -68832.66600068433 20000, -25071.38906930248 -68873.8777227183 20000");
     floorPonits.add("-43532.73869406105 -67992.14412169225 20000, -43532.73869406105 -68033.35584372625 20000");
     floorPonits.add("-47540.88198909858 -66558.68098154891 20000, -47540.88198909858 -66599.8927035829 20000");
@@ -196,7 +235,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
 
     floorPonits.add("-27635.4415632293 -71140.53080777019, -27635.4415632293 -71826.24509348448, -27635.4415632293 -71826.24509348448, -26949.72727751501 -71826.24509348448, -26949.72727751501 -71826.24509348448, -26949.72727751501 -71140.53080777019, -26949.72727751501 -71140.53080777019, -27635.4415632293 -71140.53080777019");
     floorPonits.add("-27681.23236548928 -71094.7400055102, -27681.23236548928 -70409.02571979591, -27681.23236548928 -70409.02571979591, -28366.94665120357 -70409.02571979591, -28366.94665120357 -70409.02571979591, -28366.94665120357 -71094.7400055102, -28366.94665120357 -71094.7400055102, -27681.23236548928 -71094.7400055102");
-
+    */
 
     xyzPointsFinal = getPoints(floorPonits);
     print(xyzPointsFinal);
@@ -234,12 +273,11 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
           onScaleUpdate: _handleScaleUpdate,
           child: CustomPaint(
               painter: createFloorPerimeter(_zoom, _offset),
-              child: Stack(
+              /*child: Stack(
                   fit: StackFit.expand,
                   children:
                   createTables()
-                //createFloorPerimeter()
-              )
+              )*/
           ),
         )
       ],
