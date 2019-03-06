@@ -40,9 +40,9 @@ class IndoorMapPinter extends CustomPainter {
 
       print(path);
       paint.style = PaintingStyle.stroke;
-      paint.strokeWidth = 5.0;
+      paint.strokeWidth = 3.0;
       paint.strokeJoin = StrokeJoin.round;
-      paint.color = Color.fromRGBO(150, 150, 150, 1.0);
+      paint.color = Colors.white;
       canvas.drawPath(path, paint);
     }
   }

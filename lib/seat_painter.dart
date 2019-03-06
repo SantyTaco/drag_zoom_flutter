@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'globals.dart' as globals;
 
-class TablePainter extends CustomPainter {
-  const TablePainter({
+class SeatPainter extends CustomPainter {
+  const SeatPainter({
     this.zoom,
     //this.offset,
     this.points,
-    this.offsetTablePoints
+    this.offsetSeatPoints
   });
 
   final double zoom;
   //final Offset offset;
   final Offset points;
-  final List<Offset> offsetTablePoints;
+  final List<Offset> offsetSeatPoints;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -20,18 +20,18 @@ class TablePainter extends CustomPainter {
     final Offset center = size.center(Offset.zero) * zoom + points;
     final Paint paint = Paint();
     final Path path = Path();
-    List<Offset> tableOffset = new List();
+    List<Offset> seatOffsetList = new List();
 
     print("TablePointsPainter");
     print(globals.center);
     print(center);
     print(points);
-    print(offsetTablePoints);
+    print(offsetSeatPoints);
 
-    double result = (points.dx - offsetTablePoints[0].dx);
+    double result = (points.dx - offsetSeatPoints[0].dx);
     print(result);
 
-    tableOffset =
+    seatOffsetList =
     [
       Offset(-result, -result),
       Offset(result, -result),
@@ -40,24 +40,24 @@ class TablePainter extends CustomPainter {
       Offset(-result, -result)
     ];
 
-    print(tableOffset);
+    print(seatOffsetList);
     print(" ");
-    path.addPolygon(tableOffset, true);
+    path.addPolygon(seatOffsetList, true);
 
     print(path);
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 3.0;
     paint.strokeJoin = StrokeJoin.bevel;
-    paint.color = Colors.greenAccent;
+    paint.color = Colors.blueAccent;
 
     canvas.drawPath(path, paint);
 
   }
   @override
-  bool shouldRepaint(TablePainter oldDelegate) {
+  bool shouldRepaint(SeatPainter oldDelegate) {
     // TODO: implement shouldRepaint
     return oldDelegate.zoom != zoom
         || oldDelegate.points != points
-    ||oldDelegate.offsetTablePoints != offsetTablePoints;
+        ||oldDelegate.offsetSeatPoints != offsetSeatPoints;
   }
 }
