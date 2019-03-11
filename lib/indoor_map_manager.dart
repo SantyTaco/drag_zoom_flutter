@@ -12,6 +12,12 @@ import 'package:drag_zoom_flutter/Controller/utils.dart';
 
 
 class IndoorMapManager extends StatefulWidget {
+  double zoom;
+
+  IndoorMapManager(double zoomReceived) {
+    this.zoom = zoomReceived;
+  }
+
 @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -21,18 +27,26 @@ class IndoorMapManager extends StatefulWidget {
 
 
 class IndoorMappManagerState extends State<IndoorMapManager> {
-  double _zoom = 0.02545424195914335;
-  Offset _offset = Offset(906.7, -1604.5);//Offset.zero;
+  double _zoom; //= 0.02545424195914335;
+  Offset _offset; //= Offset(906.7, -1604.5);//Offset.zero;
 
   Offset _startingFocalPoint;
   Offset _previousOffset;
   double _previousZoom;
 
+  @override
+  void initState() {
+    print('Initiate');
+    _zoom = 0.02545424195914335;
+    _offset = Offset(906.7, -1604.5);//Offset.zero;
+    super.initState();
+  }
+
 
   @override
   void didChangeDependencies() {
     print("Set Center Inizial");
-    print(Offset(MediaQuery.of(context).size.height, MediaQuery.of(context).size.width));
+    //print(Offset(MediaQuery.of(context).size.height, MediaQuery.of(context).size.width));
     globals.center = Offset(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2);//Offset(187.8, 269.9);//
     super.didChangeDependencies();
   }
@@ -40,22 +54,35 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
 
   void _handleScaleStart(ScaleStartDetails details) {
     setState(() {
+      print('ZOOM');
+      print(widget.zoom);
       _startingFocalPoint = details.focalPoint;
       _previousOffset = _offset;
-      _previousZoom = _zoom;
+      _previousZoom = widget.zoom;
     });
   }
 
   void _handleScaleUpdate(ScaleUpdateDetails details) {
     setState(() {
-      _zoom = _previousZoom * details.scale;
+      //_zoom = widget.zoom * details.scale;
       // Ensure that item under the focal point stays in the same place despite zooming
       final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) / _previousZoom;
-      _offset = details.focalPoint - normalizedOffset * _zoom;
+      _offset = details.focalPoint - normalizedOffset * widget.zoom;
       print("Update");
-      print(_zoom);
+      print(widget.zoom);
       print(_offset);
     });
+  }
+
+  void printCall(){
+
+      print("test");
+
+
+  }
+
+  void callUpdate(ScaleUpdateDetails details) {
+    _handleScaleUpdate(details);
   }
 
   List<Widget> createTables() {
@@ -68,14 +95,14 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     List<Desk> listDesk = globals.floor_data.desks;
     for(int i = 0; i < listDesk.length; i++) {
       String deskFormat = removeExtraPolygonCharactersTables(listDesk[i].polygon);
-      print(deskFormat);
+      //print(deskFormat);
       tablePoints.add(deskFormat);
     }
 
     List<Seat> listSeats = globals.floor_data.seats;
     for(int i = 0; i < listSeats.length; i++) {
       String seatFormat = removeExtraPolygonCharactersTables(listSeats[i].polygon);
-      print(seatFormat);
+      //print(seatFormat);
       tablePoints.add(seatFormat);
     }
 
@@ -84,7 +111,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     for(int i = 0; i < xyzPointsFinal.length; i++) {
       List<Offset> offsetTables = new List();
       for(int j = 0; j < xyzPointsFinal[i].length; j++) {
-        offsetTables.add(Offset(double.parse(xyzPointsFinal[i][j][0]) * _zoom, -double.parse(xyzPointsFinal[i][j][1])*_zoom));
+        offsetTables.add(Offset(double.parse(xyzPointsFinal[i][j][0]) * widget.zoom, -double.parse(xyzPointsFinal[i][j][1])*widget.zoom));
       }
       offsetTablesFinal.add(offsetTables);
     }
@@ -94,12 +121,12 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     List<List<String>> dyPoints = getDyPoints(xyzPointsFinal);
     List<Offset> tablesPositions = getTablePosition(dxPoints, dyPoints);
 
-    print("Positions");
-    print(tablesPositions);
+    //print("Positions");
+    //print(tablesPositions);
 
 
     for(int i=0; i <tablesPositions.length; i++){
-      listTables.add(SecondaryObjects(_zoom, tablesPositions[i], offsetTablesFinal[i]));
+      listTables.add(SecondaryObjects(widget.zoom, tablesPositions[i], offsetTablesFinal[i]));
     }
 
     return listTables;
@@ -117,7 +144,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     for(int i = 0; i < listSeat.length; i++) {
       print(listSeat[i].polygon);
       String seatFormat = removeExtraPolygonCharactersTables(listSeat[i].polygon);
-      print(seatFormat);
+      //print(seatFormat);
       seatPoints.add(seatFormat);
     }
 
@@ -136,8 +163,8 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     List<List<String>> dyPoints = getDyPoints(xyzPointsFinal);
     List<Offset> seatPositions = getTablePosition(dxPoints, dyPoints);
 
-    print("Positions");
-    print(seatPositions);
+    //print("Positions");
+    //print(seatPositions);
 
 
     for(int i=0; i <seatPositions.length; i++){
@@ -152,6 +179,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     List<List<List<String>>> xyzPointsFinal = new List();
 
     print("Perimeter");
+    print(zoom);
     String polygonString = globals.floor_data.perimeter.polygon;
     String polygonStringFormat = removeExtraPolygonCharacters(polygonString);
     floorPonits.add(polygonStringFormat);
@@ -170,11 +198,10 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
 
 
     xyzPointsFinal = getPoints(floorPonits);
-    print(xyzPointsFinal);
+    //print(xyzPointsFinal);
 
     return IndoorMapPinter(zoom: zoom, offset: offset, points: xyzPointsFinal);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -184,9 +211,9 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
       children: <Widget>[
         GestureDetector(
           onScaleStart: _handleScaleStart,
-          onScaleUpdate: _handleScaleUpdate,
+          onScaleUpdate: callUpdate,
           child: CustomPaint(
-              painter: createFloorPerimeter(_zoom, _offset),
+              painter: createFloorPerimeter(widget.zoom, _offset),
               child: Stack(
                   fit: StackFit.expand,
                   children:
@@ -194,6 +221,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
               )
           ),
         ),
+
         /*GestureDetector(
             onScaleStart: _handleScaleStart,
             onScaleUpdate: _handleScaleUpdate,
@@ -203,6 +231,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
                 createSeats()
             )
         )*/
+
       ],
     );
   }

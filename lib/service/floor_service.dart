@@ -4,13 +4,18 @@ import 'dart:convert';
 import 'package:drag_zoom_flutter/model/floor_model.dart';
 
 
-Future<String> _loadFloorDataAsset() async {
-  return await rootBundle.loadString('assets/floor_data.json');
+Future<String> _loadFloorDataAsset(int floorNumber) async {
+  if(floorNumber == 1) {
+    return await rootBundle.loadString('assets/floor_data.json');
+  }
+  if(floorNumber == 2) {
+    return await rootBundle.loadString('assets/floor_data2.json');
+  }
 }
 
 
-Future loadFloorData() async {
-  String jsonString = await _loadFloorDataAsset();
+Future loadFloorData(int floorNumber) async {
+  String jsonString = await _loadFloorDataAsset(floorNumber);
   final jsonResponse = json.decode(jsonString);
   Floor floor = new Floor.fromJson(jsonResponse);
   print("Service");

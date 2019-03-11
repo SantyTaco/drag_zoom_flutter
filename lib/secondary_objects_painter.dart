@@ -31,10 +31,10 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
   void initState() {
     // TODO: implement initState
     print("Global center");
-    print(globals.center);
-    print(widget._table_position);
+    //print(globals.center);
+    //print(widget._table_position);
     _offset_position = Offset(widget._table_position.dx, widget._table_position.dy);
-    print(_offset_position);
+    //print(_offset_position);
 
     super.initState();
   }

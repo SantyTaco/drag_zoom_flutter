@@ -10,7 +10,7 @@ List<Offset> getTablePosition(List<List<String>> dxPositions, List<List<String>>
   }
 
   print("Center Table");
-  print(tablesPositions);
+  //print(tablesPositions);
   return tablesPositions;
 }
 
@@ -25,7 +25,7 @@ List<List<String>> getDxPoints (List<List<List<String>>> xyzPointsFinal) {
     List<String> setDxPointsDistint = setDxPoints.toSet().toList();
     setDxPointsList.add(setDxPointsDistint);
   }
-  print(setDxPointsList);
+  //print(setDxPointsList);
   return setDxPointsList;
 }
 
@@ -40,7 +40,7 @@ List<List<String>> getDyPoints (List<List<List<String>>> xyzPointsFinal) {
     List<String> setDxPointsDistint = setDxPoints.toSet().toList();
     setDxPointsList.add(setDxPointsDistint);
   }
-  print(setDxPointsList);
+  //print(setDxPointsList);
   return setDxPointsList;
 }
 
@@ -82,6 +82,6 @@ List<List<List<String>>> getPoints(List<String> listStringPoints) {
     xyzPointsFinal.add(xyzPoints);
 
   }
-  print(xyzPointsFinal);
+  //print(xyzPointsFinal);
   return xyzPointsFinal;
 }

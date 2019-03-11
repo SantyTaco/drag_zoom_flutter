@@ -16,11 +16,13 @@ class IndoorMapPinter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
 
+
+
     final Offset center = size.center(Offset.zero) * zoom + offset;
 
     globals.center = center;
-    print("Center");
-    print(globals.center);
+    //print("Center");
+    //print(globals.center);
 
 
     final Paint paint = Paint();
@@ -38,7 +40,7 @@ class IndoorMapPinter extends CustomPainter {
       }
       path.addPolygon(listOffsetPoints, true);
 
-      print(path);
+      //print(path);
       paint.style = PaintingStyle.stroke;
       paint.strokeWidth = 3.0;
       paint.strokeJoin = StrokeJoin.round;

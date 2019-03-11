@@ -16,20 +16,20 @@ class TablePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(points);
+    //print(points);
     final Offset center = size.center(Offset.zero) * zoom + points;
     final Paint paint = Paint();
     final Path path = Path();
     List<Offset> tableOffset = new List();
 
-    print("TablePointsPainter");
+    /*print("TablePointsPainter");
     print(globals.center);
     print(center);
     print(points);
-    print(offsetTablePoints);
+    print(offsetTablePoints);*/
 
     double result = (points.dx - offsetTablePoints[0].dx);
-    print(result);
+    //print(result);
 
     tableOffset =
     [
@@ -40,12 +40,9 @@ class TablePainter extends CustomPainter {
       Offset(-result, -result)
     ];
 
-    print(tableOffset);
-    print(" ");
     path.addPolygon(tableOffset, true);
 
-    print(path);
-    paint.style = PaintingStyle.stroke;
+       paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 3.0;
     paint.strokeJoin = StrokeJoin.bevel;
     paint.color = Colors.greenAccent;
