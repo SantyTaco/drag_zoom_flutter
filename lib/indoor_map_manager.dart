@@ -13,9 +13,11 @@ import 'package:drag_zoom_flutter/Controller/utils.dart';
 
 class IndoorMapManager extends StatefulWidget {
   double zoom;
+  int zoomCall;
 
-  IndoorMapManager(double zoomReceived) {
+  IndoorMapManager(double zoomReceived, int zoomCallReceived) {
     this.zoom = zoomReceived;
+    this.zoomCall = zoomCallReceived;
   }
 
 @override
@@ -33,28 +35,35 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
   Offset _startingFocalPoint;
   Offset _previousOffset;
   double _previousZoom;
+  Offset _center;
 
   @override
   void initState() {
     print('Initiate');
     _zoom = 0.02545424195914335;
+    //_zoom = 0.00945424195914335;
     _offset = Offset(906.7, -1604.5);//Offset.zero;
+    //_offset = Offset(530.2, 897.3);
+
     super.initState();
   }
 
 
   @override
   void didChangeDependencies() {
-    print("Set Center Inizial");
-    //print(Offset(MediaQuery.of(context).size.height, MediaQuery.of(context).size.width));
-    globals.center = Offset(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2);//Offset(187.8, 269.9);//
+    print("Set Center Inizial Manager");
+    globals.initCenter = Offset(MediaQuery.of(context).size.height / 2, MediaQuery.of(context).size.width / 2);
+    print(Offset(MediaQuery.of(context).size.height / 2, MediaQuery.of(context).size.width / 2));
+    //globals.center = Offset(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2);//Offset(187.8, 269.9);//
+    _center = globals.initCenter * _zoom + _offset;
+    globals.center = _center;
     super.didChangeDependencies();
   }
 
 
   void _handleScaleStart(ScaleStartDetails details) {
     setState(() {
-      print('ZOOM');
+      print('Sacale Start');
       print(widget.zoom);
       _startingFocalPoint = details.focalPoint;
       _previousOffset = _offset;
@@ -142,7 +151,7 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
     print("CreateSeats");
     List<Seat> listSeat = globals.floor_data.seats;
     for(int i = 0; i < listSeat.length; i++) {
-      print(listSeat[i].polygon);
+      //print(listSeat[i].polygon);
       String seatFormat = removeExtraPolygonCharactersTables(listSeat[i].polygon);
       //print(seatFormat);
       seatPoints.add(seatFormat);
@@ -198,14 +207,19 @@ class IndoorMappManagerState extends State<IndoorMapManager> {
 
 
     xyzPointsFinal = getPoints(floorPonits);
-    //print(xyzPointsFinal);
 
-    return IndoorMapPinter(zoom: zoom, offset: offset, points: xyzPointsFinal);
+      print("Change center");
+      print(widget.zoomCall);
+      _center = globals.initCenter * zoom + Offset(offset.dx + (200*widget.zoomCall), offset.dy + (-250*widget.zoomCall));
+      globals.center = _center;
+
+    return IndoorMapPinter(zoom: zoom, offset: offset, points: xyzPointsFinal, center: _center);
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    print("Manager");
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[

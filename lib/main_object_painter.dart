@@ -5,24 +5,35 @@ class IndoorMapPinter extends CustomPainter {
   const IndoorMapPinter({
     this.zoom,
     this.offset,
-    this.points
+    this.points,
+    this.center
   });
 
   final double zoom;
   final Offset offset;
   final List<List<List<String>>> points;
+  final Offset center;
 
 
   @override
   void paint(Canvas canvas, Size size) {
 
+    print("Main Painter");
+    print(offset);
+    //Offset center;
+    //print(zoomCalled);
+    print(size.center(Offset.zero));
+
+    /*if(zoomCalled == 0) {
+      center = size.center(Offset.zero) * zoom + offset;
+    } else {
+      center = size.center(Offset.zero) * zoom + Offset(offset.dx + (200*zoomCalled), offset.dy + (-200*zoomCalled));
+    }*/
 
 
-    final Offset center = size.center(Offset.zero) * zoom + offset;
-
-    globals.center = center;
-    //print("Center");
-    //print(globals.center);
+    //globals.center = center;
+    print("Main Center");
+    print(center);
 
 
     final Paint paint = Paint();
@@ -47,6 +58,20 @@ class IndoorMapPinter extends CustomPainter {
       paint.color = Colors.white;
       canvas.drawPath(path, paint);
     }
+
+    /*List<Offset> points1 = [
+      Offset(center.dx+(-52024.38282852434) *zoom, center.dy+(-74872.34950061364)*zoom),
+      Offset(center.dx+(-52024.38282852434) *zoom, center.dy+(-64058.48476748931)*zoom),
+      Offset(center.dx+(-21333.00951075092) *zoom, center.dy+(-63558.42165844208)*zoom),
+      Offset(center.dx+(-21333.00951075092) *zoom, center.dy+(-74872.34950061364)*zoom),
+      Offset(center.dx+(-52024.38282852434) *zoom, center.dy+(-74872.34950061364)*zoom)];
+
+    path.addPolygon(points1, true);
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 5.0;
+    paint.strokeJoin = StrokeJoin.round;
+    paint.color = Color.fromRGBO(150, 150, 150, 1.0);
+    canvas.drawPath(path, paint);*/
   }
 
   @override

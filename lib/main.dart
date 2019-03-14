@@ -27,11 +27,13 @@ class MyAppState extends State<MyApp> {
   final customWidgetKey = new GlobalKey<manager.IndoorMappManagerState>();
   double zoom = 0.02545424195914335;
   String dropdownValue = 'One';
+  int zoomInCall = 0;
 
 
   void _zoomIn() {
     setState(() {
       zoom = zoom + 0.004;
+      zoomInCall++;
     });
 
   }
@@ -39,12 +41,14 @@ class MyAppState extends State<MyApp> {
   void _zoomOut() {
     setState(() {
       zoom = zoom - 0.004;
+      zoomInCall--;
     });
 
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Build");
     return MaterialApp(
       theme: ThemeData(
         brightness: Brightness.dark
@@ -86,7 +90,7 @@ class MyAppState extends State<MyApp> {
             ),
           ],
         ),
-        body: manager.IndoorMapManager(zoom),
+        body: manager.IndoorMapManager(zoom, zoomInCall),
         bottomNavigationBar: Row(
           children: <Widget>[
               FlatButton(

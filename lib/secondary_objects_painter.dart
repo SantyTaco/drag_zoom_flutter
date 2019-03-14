@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'globals.dart' as globals;
-import 'package:drag_zoom_flutter/model/seat_model.dart';
-import 'seats_objects_painter.dart';
-import 'package:drag_zoom_flutter/Controller/utils.dart';
 import 'table_painter.dart';
 
 class SecondaryObjects extends StatefulWidget {
@@ -30,7 +27,7 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
   @override
   void initState() {
     // TODO: implement initState
-    print("Global center");
+    print("Init State Secondary");
     //print(globals.center);
     //print(widget._table_position);
     _offset_position = Offset(widget._table_position.dx, widget._table_position.dy);
@@ -39,9 +36,10 @@ class SecondaryObjectsState extends State<SecondaryObjects> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
-
+    print("Secondary");
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[

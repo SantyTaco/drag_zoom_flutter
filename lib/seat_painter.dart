@@ -16,7 +16,7 @@ class SeatPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(points);
+    //print(points);
     final Offset center = size.center(Offset.zero) * zoom + points;
     final Paint paint = Paint();
     final Path path = Path();

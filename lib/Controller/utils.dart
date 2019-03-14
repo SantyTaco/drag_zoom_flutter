@@ -4,8 +4,8 @@ List<Offset> getTablePosition(List<List<String>> dxPositions, List<List<String>>
   List<Offset> tablesPositions = new List();
 
   for(int i = 0; i < dxPositions.length; i++) {
-    print(dxPositions[i]);
-    print(dyPositions[i]);
+    //print(dxPositions[i]);
+    //print(dyPositions[i]);
     tablesPositions.add(Offset(((double.parse(dxPositions[i][0]) + double.parse(dxPositions[i][1]))/2), -(double.parse(dyPositions[i][0]) + double.parse(dyPositions[i][1]))/2));
   }
 
