@@ -1,4 +1,4 @@
-# zoom_drag_basic_example
+# santy_example
 
 A new Flutter application.
 
